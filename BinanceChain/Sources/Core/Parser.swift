@@ -157,7 +157,7 @@ class Parser {
     }
 
     func parseTransactions(_ json: JSON) throws -> Transactions {
-        let transactions = Transactions()
+        var transactions = Transactions()
         transactions.total = json["total"].intValue
         transactions.tx = try json["tx"].map({ try self.parseTx($0.1) })
         return transactions
@@ -169,11 +169,11 @@ class Parser {
         tx.code = json["code"].intValue
         tx.confirmBlocks = json["confirm_blocks"].doubleValue
         tx.data = json["data"].stringValue
-        tx.fromAddr = json["from_addr"].stringValue
+        tx.fromAddr = json["fromAddr"].stringValue
         tx.orderId = json["orderId"].string ?? json["order_id"].stringValue
         tx.timestamp = json["timeStamp"].string?.toDate()?.date ?? Date()
         tx.toAddr = json["toAddr"].stringValue
-        tx.txAge = json["tx_age"].doubleValue
+        tx.txAge = json["txAge"].doubleValue
         tx.txAsset = json["txAsset"].stringValue
         tx.txFee = json["txFee"].stringValue
         tx.txHash = json["txHash"].stringValue
@@ -211,14 +211,22 @@ class Parser {
         let account = Account()
         account.accountNumber = json["account_number"].intValue
         account.address = json["address"].stringValue
-        account.balances = json["balances"].map({ self.parseBalance($0.1) })
+
+        let balances = json["balances"].arrayValue.count != 0 ? json["balances"].arrayValue : json["B"].arrayValue
+        account.balances = balances.map({ self.parseBalance($0) })
         account.publicKey = self.parsePublicKey(json["public_key"])
         account.sequence = json["sequence"].intValue
         return account
     }
+
+    func parseAccountOnWebSocket(_ json: JSON) -> Account {
+        let account = Account()
+        account.balances = json["B"].map({ self.parseBalance($0.1) })
+        return account
+    }
     
     func parseBalance(_ json: JSON) -> Balance {
-        let balance = Balance()
+        var balance = Balance()
         balance.symbol = json["symbol"].string ?? json["a"].stringValue
         balance.free = json["free"].doubleString ?? json["f"].doubleValue
         balance.locked = json["locked"].doubleString ?? json["l"].doubleValue

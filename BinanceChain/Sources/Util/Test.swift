@@ -52,7 +52,7 @@ public class Test: WebSocketDelegate {
             }
             
         case .api:
-            self.testAPI(endpoint: .testnet) {}
+            self.testAPI(endpoint: .mainnet) {}
             
         case .wallet:
             self.testWallet(endpoint: .testnet)
@@ -61,7 +61,7 @@ public class Test: WebSocketDelegate {
             self.testBroadcast(endpoint: .testnet)
             
         case .websocket:
-            self.testWebSocket(endpoint: .testnet)
+            self.testWebSocket(endpoint: .mainnet)
             
         case .broadcastcontrol:
             self.testBroadcastControl(endpoint: .testnet)
@@ -281,7 +281,7 @@ public class Test: WebSocketDelegate {
 
         let webSocket = WebSocket(delegate: self)
         self.webSocket = webSocket
-        webSocket.connect(endpoint: endpoint) {
+        webSocket.connect() {
 
             if (minimise) {
                 webSocket.subscribe(candlestick: [self.symbol], interval: .oneMinute)

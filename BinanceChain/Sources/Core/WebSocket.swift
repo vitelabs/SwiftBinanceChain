@@ -35,6 +35,8 @@ public class WebSocket {
     internal enum Method: String {
         case subscribe = "subscribe"
         case unsubscribe = "unsubscribe"
+        case keepAlive = "keepAlive"
+        case close = "close"
     }
 
     internal enum Topic: String {
@@ -106,7 +108,7 @@ public class WebSocket {
 
     }
 
-    public func connect(endpoint: Endpoint = .testnet, completion: @escaping ()->()) {
+    public func connect(completion: @escaping ()->()) {
         self.connectCompleted = completion
         self.socket.connect()
     }
@@ -116,11 +118,24 @@ public class WebSocket {
     }
 
     private func send(message: Message) -> Subscription {
+        let json = message.json
         self.socket.write(string: message.json)
         return Subscription(message: message)
     }
+    private func send(jsonStr: String)  {
+        self.socket.write(string: jsonStr)
+    }
 
     // MARK: - Subscribe
+    public func keepAlive() {
+        let dic = ["method":"keepAlive"]
+        self.send(jsonStr:JSON.init(dic).rawString() ?? "{}");
+    }
+
+    public func close() {
+        let dic = ["method":"close"]
+        self.send(jsonStr:JSON.init(dic).rawString() ?? "{}");
+    }
 
     @discardableResult
     public func subscribe(orders address: String) -> Subscription {
@@ -212,7 +227,7 @@ public class WebSocket {
     }
 
     private func onDisconnect() {
-        self.delegate.webSocketDidConnect(webSocket: self)
+        self.delegate.webSocketDidDisconnect(webSocket: self)
     }
     
     private func onText(text: String) {

@@ -42,9 +42,19 @@ public class NodeInfo: CustomStringConvertible {
     public var validatorInfo: Validator = Validator()
 }
 
-public class Transactions: CustomStringConvertible {
+public struct Transactions: CustomStringConvertible {
     public var total: Int = 0
     public var tx: [Tx] = []
+
+    public var description: String {
+        get {
+            return ""
+        }
+    }
+
+    public init() {
+
+    }
 }
 
 public class Transaction: CustomStringConvertible {
@@ -67,7 +77,7 @@ public class AccountSequence: CustomStringConvertible {
     public var sequence: Int = 0
 }
 
-public class Balance: CustomStringConvertible {
+public struct Balance: CustomStringConvertible {
     public var symbol: String = ""
     public var free: Double = 0
     public var locked: Double = 0

@@ -10,8 +10,8 @@ class ViewController: UIViewController {
 
         // Run tests
         self.test = Test()
-        self.test?.runTestsOnTestnet(.allMinimised)
-
+        self.test?.runTestsOnTestnet(.websocket)
+//self.test?.runTestsOnTestnet(.api)
     }
 
 }

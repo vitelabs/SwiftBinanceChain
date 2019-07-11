@@ -186,3 +186,16 @@ fileprivate extension HDWalletKit.PrivateKey {
     
 }
 
+extension String {
+    public func checkBnbAddressIsValid() ->Bool {
+        do {
+            let _ = try Bech32().decode(self)
+            return true
+        } catch {
+            return false
+        }
+    }
+}
+
+
+

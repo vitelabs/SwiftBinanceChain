@@ -223,11 +223,11 @@ public class BinanceChain {
         var parameters: Parameters = [:]
         parameters["address"] = address
         if let blockHeight = blockHeight { parameters["blockHeight"] = blockHeight }
-        if let endTime = endTime { parameters["endTime"] = endTime }
-        if let limit = limit { parameters["limit"] = limit }
+        if let endTime = endTime { parameters["endTime"] = Int(endTime) }
+        if let limit = limit { parameters["limit"] = limit.rawValue }
         if let offset = offset { parameters["offset"] = offset }
         if let side = side { parameters["side"] = side.rawValue }
-        if let startTime = startTime { parameters["startTime"] = startTime }
+        if let startTime = startTime { parameters["startTime"] = Int(startTime) }
         if let txAsset = txAsset { parameters["txAsset"] = txAsset }
         if let txType = txType { parameters["txType"] = txType.rawValue }
         self.api(path: .transactions, method: .get, parameters: parameters, parser: TransactionsParser(), completion: completion)
@@ -246,6 +246,8 @@ public class BinanceChain {
         var encoding: ParameterEncoding = URLEncoding.default
         if let body = body { encoding = HexEncoding(data: body) }
         let url = String(format: "%@/%@", self.endpoint, path)
+        let manager = Alamofire.SessionManager.default
+        manager.session.configuration.timeoutIntervalForRequest = 10
         let request = Alamofire.request(url, method: method, parameters: parameters, encoding: encoding)
         request.validate(statusCode: 200..<300)
         request.responseData() { (http) -> Void in
