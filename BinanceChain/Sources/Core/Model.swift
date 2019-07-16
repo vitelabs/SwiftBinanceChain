@@ -79,9 +79,11 @@ public class AccountSequence: CustomStringConvertible {
 
 public struct Balance: CustomStringConvertible {
     public var symbol: String = ""
-    public var free: Double = 0
-    public var locked: Double = 0
-    public var frozen: Double = 0
+    public var free: String = ""
+    public var locked: String = ""
+    public var frozen: String = ""
+
+    public init() {}
 }
 
 public class Token: CustomStringConvertible {

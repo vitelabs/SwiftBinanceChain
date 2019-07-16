@@ -228,9 +228,9 @@ class Parser {
     func parseBalance(_ json: JSON) -> Balance {
         var balance = Balance()
         balance.symbol = json["symbol"].string ?? json["a"].stringValue
-        balance.free = json["free"].doubleString ?? json["f"].doubleValue
-        balance.locked = json["locked"].doubleString ?? json["l"].doubleValue
-        balance.frozen = json["frozen"].doubleString ?? json["r"].doubleValue
+        balance.free = json["free"].string ?? json["f"].stringValue
+        balance.locked = json["locked"].string ?? json["l"].stringValue
+        balance.frozen = json["frozen"].string ?? json["r"].stringValue
         return balance
     }
 
